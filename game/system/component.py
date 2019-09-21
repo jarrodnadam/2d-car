@@ -24,6 +24,7 @@ class Component(metaclass=abc.ABCMeta):
         self.v_x = kwargs.get('v_x', 0.0)
         self.v_y = kwargs.get('v_y', 0.0)
         self.impulse = kwargs.get('impulse', 0.0)
+        self.drag = kwargs.get('drag', 0.005)
         self.rotation = kwargs.get('rotation', 0.0)
         self.rotate_speed = kwargs.get('rotate_speed', 0.0)
         self.width = kwargs.get('width', 0)

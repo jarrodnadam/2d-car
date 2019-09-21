@@ -1,6 +1,6 @@
-import pyglet
 import os
 from random import randint
+import pyglet
 from game import config
 from game.system.component import Component
 from game.entities.runner import Runner
@@ -27,7 +27,6 @@ def update(dt):
         if isinstance(ball, Component):
             ball.update(dt)
  
-
 @window.event
 def on_draw():
     window.clear()
