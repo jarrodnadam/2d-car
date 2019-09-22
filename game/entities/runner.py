@@ -18,7 +18,10 @@ class Runner(Component):
         self.image.anchor_y = self.image.height / 2
         self.width = self.image.width
         self.height = self.image.height
-        self.sprite = pyglet.sprite.Sprite(self.image, self.x, self.y, batch=kwargs.get('batch', None))
+        self.sprite = pyglet.sprite.Sprite(self.image, 
+                                           self.position[0], 
+                                           self.position[1], 
+                                           batch=kwargs.get('batch', None))
         self.rotation = 90
         self.impulse = 200
         self.drag = 0.005
@@ -51,16 +54,16 @@ class Runner(Component):
             self.acceleration[1] = math.sin(angle_radians) * - self.impulse
 
         # christmas wrapping
-        if self.x - self.width // 2 < 0 or (self.x + self.width // 2) > config.WINDOW_WIDTH:
+        if self.position[0] - self.width // 2 < 0 or (self.position[0] + self.width // 2) > config.WINDOW_WIDTH:
             self.velocity[0] *= -1
 
-        if self.y - self.width // 2 < 0 or (self.y + self.width // 2) > config.WINDOW_HEIGHT:
+        if self.position[1]  - self.width // 2 < 0 or (self.position[1] + self.width // 2) > config.WINDOW_HEIGHT:
             self.velocity[1] *= -1
 
         self.velocity += self.acceleration * dt - self.drag * self.velocity
         self.position += self.velocity * dt
 
-        self.sprite.update(self.x, self.y, rotation=self.rotation)
+        self.sprite.update(x=self.position[0], y=self.position[1], rotation=self.rotation)
 
     def draw(self):
         """
