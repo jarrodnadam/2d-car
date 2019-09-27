@@ -1,6 +1,8 @@
 import abc
+import pyglet
 from math import atan2, degrees, sqrt, sin, cos, radians
 import numpy as np
+from game import config
 
 class Component(metaclass=abc.ABCMeta):
 
@@ -17,12 +19,20 @@ class Component(metaclass=abc.ABCMeta):
         """
 
         # Basic stuff
+        
+        self.image = pyglet.resource.image(kwargs.get('image_name', 'dvd.png'))
+        self.image.anchor_x = self.image.width / 2
+        self.image.anchor_y = self.image.height / 2
+        self.width = self.image.width
+        self.height = self.image.height
         self.active = kwargs.get('active', True)
         self.render = kwargs.get('render', True)
         self.debug = kwargs.get('debug', False)
         self.position = np.array([kwargs.get('x', 0.0), kwargs.get('y', 0.0)], dtype='float64')
-        self.width = kwargs.get('width', 0)
-        self.height = kwargs.get('height', 0)
+        self.sprite = pyglet.sprite.Sprite(self.image,
+                                    self.position[0],
+                                    self.position[1],
+                                    batch=kwargs.get('batch', None))
         self.velocity = np.zeros(2, dtype='float64')
         self.acceleration = np.zeros(2, dtype='float64')
         self.rotation = 0.0
@@ -32,9 +42,19 @@ class Component(metaclass=abc.ABCMeta):
     def get_speed(self):
         return sqrt(self.velocity[0]**2 + self.velocity[1]**2)
 
-    @abc.abstractmethod
-    def update(self):
-        pass
+    def update(self, dt):
+        # christmas wrapping
+        if self.position[0] - self.width // 2 < 0 or (self.position[0] + self.width // 2) > config.WINDOW_WIDTH:
+            self.velocity[0] *= -1
+
+        if self.position[1]  - self.width // 2 < 0 or (self.position[1] + self.width // 2) > config.WINDOW_HEIGHT:
+            self.velocity[1] *= -1
+
+        self.velocity += self.acceleration * dt - self.drag * self.velocity
+        self.position += self.velocity * dt
+        self.sprite.update(x=self.position[0], y=self.position[1], rotation=self.rotation + 90)
+        self.acceleration[0], self.acceleration[1] = 0, 0
+
 
     @abc.abstractmethod
     def draw(self):

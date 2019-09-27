@@ -1,3 +1,6 @@
+"""
+Asteroid 
+"""
 import os
 import math
 import pyglet
@@ -18,11 +21,11 @@ class Runner(Component):
         self.image.anchor_y = self.image.height / 2
         self.width = self.image.width
         self.height = self.image.height
-        self.sprite = pyglet.sprite.Sprite(self.image, 
-                                           self.position[0], 
-                                           self.position[1], 
+        self.sprite = pyglet.sprite.Sprite(self.image,
+                                           self.position[0],
+                                           self.position[1],
                                            batch=kwargs.get('batch', None))
-        self.rotation = 90
+        self.rotation = 0
         self.impulse = 200
         self.drag = 0.005
         self.rotate_speed = 180
@@ -34,6 +37,7 @@ class Runner(Component):
         Also ensures that the ball does not leave the screen area by changing its axis direction
         :return:
         """
+
 
         # turning
         if self.keys['left']:
@@ -64,6 +68,9 @@ class Runner(Component):
         self.position += self.velocity * dt
 
         self.sprite.update(x=self.position[0], y=self.position[1], rotation=self.rotation)
+
+        self.acceleration[0], self.acceleration[1] = 0, 0
+
 
     def draw(self):
         """

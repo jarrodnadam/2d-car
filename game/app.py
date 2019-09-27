@@ -4,6 +4,7 @@ import pyglet
 from game import config
 from game.system.component import Component
 from game.entities.runner import Runner
+from game.entities.car import Car   
  
 window = pyglet.window.Window(height=config.WINDOW_HEIGHT,
                               width=config.WINDOW_WIDTH)
@@ -15,7 +16,7 @@ fps_display = pyglet.window.FPSDisplay(window=window)
 
 objects = []
 MAIN_BATCH = pyglet.graphics.Batch()
-player = Runner(x=window.width // 2, y=window.height // 2, speed=randint(3, 12), batch=MAIN_BATCH)
+player = Car(x=window.width // 2, y=window.height // 2, speed=randint(3, 12), batch=MAIN_BATCH)
  
 def update(dt):
     """
